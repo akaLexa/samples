@@ -1,0 +1,12 @@
+1000 - not an integer
+1001 - not a float
+1002 - not a bool
+1003 - not an array
+1004 - empty important field
+1005 - not a string
+1006 - HtmlStringHasBadWordError
+1007 - not a date
+1008 - not a date time
+1009 - wrong scheme
+1010 - empty scheme
+1011 - empty data
