@@ -1,0 +1,24 @@
+{
+  "name": "jwysiwyg",
+  "version": "0.99",
+  "description": "WYSIWYG jQuery Plugin",
+  "homepage": "http://jwysiwyg.github.com/jwysiwyg",
+  "bugs": {
+    "url": "https://github.com/jwysiwyg/jwysiwyg/issues",
+    "email" : "akzhan.abdulin@gmail.com"
+  },
+  "license": "(MIT OR GPL-1.0+)",
+  "author": {
+    "name" : "Akzhan Abdulin",
+    "email" : "akzhan.abdulin@gmail.com",
+    "url" : "http://akzhan.github.io/"
+  },
+  "main": "jquery.wysiwyg.js",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/wysiwyg/wysiwyg.git"
+  },
+  "dependencies": {
+    "jquery": ">=1.3.2"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "jwysiwyg",
+  "license": "MIT",
+  "main": [
+    "jquery.wysiwyg.js",
+    "jquery.wysiwyg.css"
+  ],
+  "ignore": [
+    "**/.*",
+    "build",
+    "help",
+    "test",
+    "build.yml",
+    "CHANGES.markdown",
+    "index.html",
+    "Rakefile"
+  ],
+  "dependencies": {
+    "jquery": ">=1.3.2"
+  }
+}
