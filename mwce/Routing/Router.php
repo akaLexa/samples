@@ -65,7 +65,7 @@ class Router
     private function __construct()
     {
         try {
-            $data = URLparser::Parse();
+            $data = URLParser::Parse();
             $this->parseData = $data;
 
             $tmp_ = require baseDir . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'configs.php';
@@ -107,7 +107,7 @@ class Router
             }
 
 
-            $this->defController = '\\build\\' . Configs::currentBuild() . '\\inc\\' . Configs::buildCfg('defController');
+            $this->defController = DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR . Configs::currentBuild() . DIRECTORY_SEPARATOR . 'inc' . DIRECTORY_SEPARATOR . Configs::buildCfg('defController');
 
             $this->view = new Content(Tools::getAddress(), !empty(Configs::buildCfg('theme')) ? Configs::buildCfg('theme') : null, !empty(Configs::buildCfg('dlang')) ? Configs::buildCfg('dlang') : null);
 
@@ -115,7 +115,7 @@ class Router
 
             if (file_exists(baseDir . DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR . Configs::currentBuild() . DIRECTORY_SEPARATOR . 'inc' . DIRECTORY_SEPARATOR . 'AccessRouter.php')) {
 
-                $AccessRouter = '\\build\\' . Configs::currentBuild() . '\\inc\\' . 'AccessRouter';
+                $AccessRouter = DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR . Configs::currentBuild() . DIRECTORY_SEPARATOR . 'inc' . DIRECTORY_SEPARATOR . 'AccessRouter';
 
                 self::$accessor = new $AccessRouter($this->view, Configs::globalCfg('defaultConNum')); //todo: прописать в конфиг билда загрузку по умолчанию?
 
@@ -327,11 +327,9 @@ class Router
         }
     }
 
-    public function __isset($name)
-    {
+    public function __isset($name){
     }
 
-    public function __set($name, $value)
-    {
+    public function __set($name, $value){
     }
 }

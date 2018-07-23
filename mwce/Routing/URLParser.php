@@ -9,7 +9,7 @@
 
 namespace mwce\Routing;
 
-class URLparser
+class URLParser
 {
     protected static $inst;
     protected $parserData;
@@ -89,10 +89,13 @@ class URLparser
             $toemp = implode('/', $list) . '/';
             $path = str_replace($toemp, '', $path);
         }
+
         $path_array = explode('/', $path);
 
-
-        if (strripos($path, '.html') === false && strripos($path, '.php') === false) //если запрос для бекграунда (ajax, наример)
+        if (
+            strripos($path, '.html') === false
+            && strripos($path, '.php') === false
+        ) //если запрос для бекграунда (ajax, наример)
         {
             $this->parserData['isBg'] = true;
         }

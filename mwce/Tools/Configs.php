@@ -45,10 +45,10 @@ class Configs
     }
 
     /**
+     * создание/запись в новый/существующий конфиг
      * @param array $config - массив с параметрами
      * @param string $filename - название конфига (без расширения)
      * @param string $build - билд, по умолчанию default
-     * создание/запись в новый/существующий конфиг
      */
     public static function writeCfg($config, $filename, $build = 'default'): void
     {
@@ -92,10 +92,10 @@ class Configs
     }
 
     /**
+     * Восстанавливает файл конфигурации в случае, если есть копия
      * @param string $cname название конфига (без расширения)
      * @param string $build билд, по умолчанию "default"
      * @return bool true в случае удачи и false в противном случае
-     * Восстанавливает файл конфигурации в случае, если есть копия
      */
     public static function recoverCfg($cname, $build = 'default'): bool
     {
@@ -192,12 +192,10 @@ class Configs
      */
     public static function loadConnectionCfg()
     {
-
         $path = baseDir . DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR . self::currentBuild() . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'connections.php';
         if (file_exists($path)) {
             return require $path;
         }
-
         return [];
     }
 }

@@ -14,7 +14,7 @@ define('baseDir', __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '
 
 spl_autoload_register(function ($class) {
 
-    $filename = baseDir . '/' . str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
+    $filename = baseDir . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
 
     if (file_exists($filename)) {
         include $filename;
