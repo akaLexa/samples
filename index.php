@@ -9,6 +9,18 @@
 
 require __DIR__ . DIRECTORY_SEPARATOR . 'mwce' . DIRECTORY_SEPARATOR . 'Routing' . DIRECTORY_SEPARATOR . 'Autoload.php';
 
+$view = new \mwce\Templater\Templater('');
+$view
+    ->setModuleName('test')
+    ->set('test','тестовое значение')
+    ->set('test1',[0=>['some name0 '],1=>['some name1 ']])
+    ->renderFragment('test2.html','included')
+    ->renderFragment('test.html','firstTest')
+    ->merge($view->getFragment('included'),$view->getFragment('firstTest'),'@include')
+;
+\mwce\Tools\Tools::debug($view->getFragment('firstTest')->release());
+
+exit;
 $app = mwce\Routing\Router::start();
 $app->startPlugins();
 $app->startModules();
