@@ -2,9 +2,8 @@
 
 /**
  * MuWebCloneEngine
- * Created by epmak
- * 26.03.2017
- *
+ * epmak.a@mail.ru
+ * 09.08.2010
  **/
 
 namespace mwce\Routing;
@@ -78,6 +77,7 @@ class URLParser
     );
 
     /**
+     * порядок чтения из URI
      * @var array
      */
     protected $URI_template = array( 'type', 'controller', 'action' );
