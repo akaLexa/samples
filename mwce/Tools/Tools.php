@@ -39,20 +39,34 @@ class Tools
      */
     public static function debug($obj): void
     {
+        print '<pre>';
         $numargs = \func_num_args();
         if ($numargs > 1) {
             $arg_list = \func_get_args();
             foreach ($arg_list as $i => $iValue) {
-                print '<pre>';
                 print_r($arg_list[$i]);
-                print '</pre>';
             }
         }
         else {
-            print '<pre>';
             print_r($obj);
-            print '</pre>';
         }
+        print '</pre>';
+    }
+
+    public static function debugDump($obj): void
+    {
+        print '<pre>';
+        $numargs = \func_num_args();
+        if ($numargs > 1) {
+            $arg_list = \func_get_args();
+            foreach ($arg_list as $i => $iValue) {
+                var_dump($arg_list[$i]);
+            }
+        }
+        else {
+            var_dump($obj);
+        }
+        print '</pre>';
     }
 
     public static function debugCmd($obj): void
