@@ -8,7 +8,13 @@
 
 namespace mwce\Templater;
 
-
+/**
+ * Class Fragment
+ * @package mwce\Templater
+ * @version 1.0
+ * Класс - парсер шаблонов. Является составной частью механизма шаблонизатора в паре с Templater. Данный класс отвечает
+ * за парсинг и хранение текста шаблона, как распаршенного, так и исходного.
+ */
 class Fragment
 {
     /**
@@ -169,14 +175,6 @@ class Fragment
     }
 
     /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getContainer();
-    }
-
-    /**
      * окончательный результат парсинга фрагмента, с затертыми неиспользуемыми тегами
      * @param bool $save сохранить ли конечный результат в контейнер фрагмента
      * @return string
@@ -195,24 +193,17 @@ class Fragment
         return null !== $this->container ? preg_replace('/(' . preg_quote($this->openTag,'') . "){1}(\/)?(.*)(" . preg_quote($this->closeTag,'') . '){1}/','',$this->container) : '';
     }
 
-    /**
-     * словарь. [static -> статичные данные (адрес сайта, название темы и т.п.), module -> данные модуля]
-     * @var array
-     */
-    //private $dictionary;
-    /**
-     * @param array $array
-     * @return array
-     */
-    /* protected function setDictionaryItems (array $array) : array {
-         $r = array();
+    public function show() : void {
+        echo $this->container;
+    }
 
-         foreach ($array as $alias => $item) {
-             $r[$this->openTag . $alias . $this->closeTag] = \is_array($item) ? $this->setDictionaryItems($item) : $item;
-         }
-
-         return $r;
-     }*/
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getContainer();
+    }
 
     /*
     protected function recurseReplace(array $data, string $fragment) : string{

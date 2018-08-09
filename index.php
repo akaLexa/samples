@@ -8,7 +8,7 @@
  **/
 
 require __DIR__ . DIRECTORY_SEPARATOR . 'mwce' . DIRECTORY_SEPARATOR . 'Routing' . DIRECTORY_SEPARATOR . 'Autoload.php';
-
+/*
 $view = new \mwce\Templater\Templater('');
 $view
     ->setModuleName('test')
@@ -18,9 +18,10 @@ $view
     ->renderFragment('test.html','firstTest')
     ->merge($view->getFragment('included'),$view->getFragment('firstTest'),'@include')
 ;
-\mwce\Tools\Tools::debug($view->getFragment('firstTest')->release());
 
-exit;
+$view->release('mainTest.html')->show();
+
+exit;*/
 $app = mwce\Routing\Router::start();
 $app->startPlugins();
 $app->startModules();

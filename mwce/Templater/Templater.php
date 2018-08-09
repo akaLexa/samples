@@ -8,11 +8,13 @@
 
 namespace mwce\Templater;
 
-
 /**
- * Class Themeplater
- * @package mwce\Tools
+ * Class Templater
+ * @package mwce\Templater
  * @version 2.0
+ * Шаблонизатор. Состоит из 2 классов: Templater и Fragment. Templater копит в себе Fragment через renderFragment и
+ * имеет возможность либо вернуть только выбранный Fragment через getFragment, либо вернуть результирующий Fragment
+ * через release
  */
 class Templater
 {
@@ -28,11 +30,6 @@ class Templater
     private $themeRoot;
 
     /**
-     * @var string
-     */
-    private $mainFrameDoc = '';
-
-    /**
      * @var array
      */
     private $dictionary = array();
@@ -42,6 +39,11 @@ class Templater
      * @var string
      */
     private $currentModuleName;
+
+    /**
+     * @var Templater
+     */
+    private $currentModule;
 
     /**
      * @var array
@@ -56,21 +58,6 @@ class Templater
      * @var string
      */
     private $closeTag = '}}';
-
-    /**
-     * @var array [pluginName => html-code]
-     */
-    private $renderedPlugins = array();
-    /**
-     * @var string
-     */
-    private $renderedModule = '';
-
-    /**
-     * @var array
-     */
-    private $moduleFragments = array();
-
 
     /**
      * Themeplater constructor.
@@ -149,14 +136,15 @@ class Templater
      */
     public function renderFragment(string $templateName, string $fragmentName, bool $useRootPath = true): Templater {
 
-        $this->fragments[$this->currentModuleName][$fragmentName] = new Fragment(
+        $this->fragments[$this->currentModuleName][$fragmentName]['fragment'] = new Fragment(
             !$useRootPath || empty($this->themeRoot) ? $templateName : $this->themeRoot . DIRECTORY_SEPARATOR . $templateName,
             $this->currentModuleName,
             $this->openTag,
             $this->closeTag
         );
+        $this->fragments[$this->currentModuleName][$fragmentName]['q'] = \count($this->fragments[$this->currentModuleName]);
 
-        $this->fragments[$this->currentModuleName][$fragmentName]->render(
+        $this->fragments[$this->currentModuleName][$fragmentName]['fragment']->render(
             $this->dictionary[self::main],
             !empty($this->dictionary['module'][$this->currentModuleName]) ? $this->dictionary['module'][$this->currentModuleName] : []
         );
@@ -167,12 +155,12 @@ class Templater
     /**
      * Вставка одного фрагмента в другой
      * @param Fragment $fragment фрагмент, который нужно вставить
-     * @param Fragment $fragmentTarget фрагмент, В который нужно вставить
+     * @param Fragment $target фрагмент, В который нужно вставить
      * @param string $inTag тег, в который будет вставлен фрагмент
      * @param bool $refresh нужно ли обновить рендеринг фрагмента $fragment перед вставкой
      * @return Templater
      */
-    public function merge (Fragment $fragment, Fragment $fragmentTarget, string $inTag, bool $refresh = false) : Templater {
+    public function merge (Fragment $fragment, Fragment $target, string $inTag, bool $refresh = false) : Templater {
 
         if($refresh){
             $fragment->render(
@@ -182,7 +170,7 @@ class Templater
             );
         }
 
-        $fragmentTarget->merge($fragment,$inTag);
+        $target->merge($fragment,$inTag);
 
         return $this;
     }
@@ -193,6 +181,44 @@ class Templater
      * @return Fragment|null
      */
     public function getFragment(string $name,string $moduleName = null) : ?Fragment {
-        return $this->fragments[$moduleName ?? $this->currentModuleName][$name] ?? null;
+        return $this->fragments[$moduleName ?? $this->currentModuleName][$name]['fragment'] ?? null;
     }
+
+    /**
+     * результирующий фрагмент, в который через @<имя_модуля> можно подключить все фрагменты
+     * @param string $templateName
+     * @param bool $useRootPath
+     * @return Fragment
+     */
+    public function release(string $templateName, bool $useRootPath = true) : Fragment{
+
+        $modules = array();
+
+        foreach ($this->fragments as $module){
+            $fragmentsCount = \count($module);
+
+            foreach ($module as $fragment) {
+                if($fragmentsCount === $fragment['q']){
+                    $fragment['fragment']->release();
+                    $modules[$this->openTag . '@'.$fragment['fragment']->getParentModule() . $this->closeTag] = $fragment['fragment']->getContainer();
+                    unset($this->fragments[$fragment['fragment']->getParentModule()]);
+                }
+            }
+        }
+
+        $this->currentModule = new Fragment(
+            !$useRootPath || empty($this->themeRoot) ? $templateName : $this->themeRoot . DIRECTORY_SEPARATOR . $templateName,
+            $this->currentModuleName,
+            $this->openTag,
+            $this->closeTag
+        );
+
+        $this->currentModule->render(
+            $this->dictionary[self::main],
+            $modules
+        );
+
+        return $this->currentModule;
+    }
+
 }
