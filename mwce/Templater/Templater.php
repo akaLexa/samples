@@ -63,7 +63,7 @@ class Templater
      * Themeplater constructor.
      * @param string $rootThemePath адрес до корневой дирректории с файлами шаблонов
      */
-    public function __construct(string $rootThemePath)
+    public function __construct(string $rootThemePath = '')
     {
         $this->themeRoot = $rootThemePath;
         $this->dictionary[self::main] = array();

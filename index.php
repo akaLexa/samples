@@ -22,6 +22,8 @@ $view
 $view->release('mainTest.html')->show();
 */
 
+$_  = \mwce\Routing\mwce::Start();
+
 $app = mwce\Routing\Router::start();
 $app->startPlugins();
 $app->startModules();

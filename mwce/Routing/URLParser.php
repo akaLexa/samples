@@ -125,7 +125,7 @@ class URLParser
             }
         }
         else {
-            $this->parserData['type'] = self::$types[0];
+            $this->parserData['type'] = self::$types[0]; //"page" by default
         }
     }
 
