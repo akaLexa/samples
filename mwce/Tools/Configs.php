@@ -2,8 +2,8 @@
 
 /**
  * MuWebCloneEngine
- * Version: 1.6
- * User: epmak
+ * Version: 1.7
+ * epmak.a@mail.ru
  * 08.04.2016
  *
  **/
@@ -174,15 +174,13 @@ class Configs
             if (empty(self::$instance->Cfgs[$name])) {
                 self::$instance->Cfgs[$name] = $value;
             }
+            else if (\is_array(self::$instance->Cfgs[$name])) {
+                if (\is_array($value)) {
+                    self::$instance->Cfgs[$name] = array_merge(self::$instance->Cfgs[$name], $value);
+                }
+            }
             else {
-                if (\is_array(self::$instance->Cfgs[$name])) {
-                    if (\is_array($value)) {
-                        self::$instance->Cfgs[$name] = array_merge(self::$instance->Cfgs[$name], $value);
-                    }
-                }
-                else {
-                    self::$instance->Cfgs[$name] = $value;
-                }
+                self::$instance->Cfgs[$name] = $value;
             }
         }
     }
