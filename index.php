@@ -20,8 +20,8 @@ $view
 ;
 
 $view->release('mainTest.html')->show();
+*/
 
-exit;*/
 $app = mwce\Routing\Router::start();
 $app->startPlugins();
 $app->startModules();
