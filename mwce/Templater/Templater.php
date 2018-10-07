@@ -8,6 +8,7 @@
 
 namespace mwce\Templater;
 
+
 /**
  * Class Templater
  * @package mwce\Templater
@@ -62,9 +63,13 @@ class Templater
     /**
      * Themeplater constructor.
      * @param string $rootThemePath адрес до корневой дирректории с файлами шаблонов
+     * @throws \Exception
      */
     public function __construct(string $rootThemePath = '')
     {
+        if (!empty($rootThemePath) && !file_exists($rootThemePath)) {
+            throw new \Exception('Directory "' . $rootThemePath . '" not found.');
+        }
         $this->themeRoot = $rootThemePath;
         $this->dictionary[self::main] = array();
         $this->dictionary['module'] = array();
@@ -96,20 +101,23 @@ class Templater
      * @param bool $changeActiveModule
      * @return Templater
      */
-    public function set($id,$value, string $name = null, bool $changeActiveModule = false) : Templater {
+    public function set($id, $value, string $name = null, bool $changeActiveModule = false): Templater
+    {
 
-        if(null === $name){
+        if (null === $name) {
             $name = $this->currentModuleName;
         }
-        else if ($changeActiveModule){
-            $this->currentModuleName = $name;
+        else {
+            if ($changeActiveModule) {
+                $this->currentModuleName = $name;
+            }
         }
 
-        if(!isset($this->dictionary['module'][$name]) || !\is_array($this->dictionary['module'][$name])){
+        if (!isset($this->dictionary['module'][$name]) || !\is_array($this->dictionary['module'][$name])) {
             $this->dictionary['module'][$name] = array();
         }
 
-        $this->dictionary['module'][$name] = array_merge($this->dictionary['module'][$name],$this->setDictionaryItems([$id=>$value]));
+        $this->dictionary['module'][$name] = array_merge($this->dictionary['module'][$name], $this->setDictionaryItems([ $id => $value ]));
 
         return $this;
     }
@@ -118,7 +126,8 @@ class Templater
      * @param array $array
      * @return array
      */
-    protected function setDictionaryItems (array $array) : array {
+    protected function setDictionaryItems(array $array): array
+    {
         $r = array();
 
         foreach ($array as $alias => $item) {
@@ -134,7 +143,8 @@ class Templater
      * @param bool $useRootPath
      * @return Templater
      */
-    public function renderFragment(string $templateName, string $fragmentName, bool $useRootPath = true): Templater {
+    public function renderFragment(string $templateName, string $fragmentName, bool $useRootPath = true): Templater
+    {
 
         $this->fragments[$this->currentModuleName][$fragmentName]['fragment'] = new Fragment(
             !$useRootPath || empty($this->themeRoot) ? $templateName : $this->themeRoot . DIRECTORY_SEPARATOR . $templateName,
@@ -160,9 +170,10 @@ class Templater
      * @param bool $refresh нужно ли обновить рендеринг фрагмента $fragment перед вставкой
      * @return Templater
      */
-    public function merge (Fragment $fragment, Fragment $target, string $inTag, bool $refresh = false) : Templater {
+    public function merge(Fragment $fragment, Fragment $target, string $inTag, bool $refresh = false): Templater
+    {
 
-        if($refresh){
+        if ($refresh) {
             $fragment->render(
                 $this->dictionary[self::main],
                 !empty($this->dictionary['module'][$fragment->getParentModule()]) ? $this->dictionary['module'][$fragment->getParentModule()] : [],
@@ -170,7 +181,7 @@ class Templater
             );
         }
 
-        $target->merge($fragment,$inTag);
+        $target->merge($fragment, $inTag);
 
         return $this;
     }
@@ -180,7 +191,8 @@ class Templater
      * @param string|null $moduleName название модуля, где был впервые использован
      * @return Fragment|null
      */
-    public function getFragment(string $name,string $moduleName = null) : ?Fragment {
+    public function getFragment(string $name, string $moduleName = null): ?Fragment
+    {
         return $this->fragments[$moduleName ?? $this->currentModuleName][$name]['fragment'] ?? null;
     }
 
@@ -190,17 +202,18 @@ class Templater
      * @param bool $useRootPath
      * @return Fragment
      */
-    public function release(string $templateName, bool $useRootPath = true) : Fragment{
+    public function release(string $templateName, bool $useRootPath = true): Fragment
+    {
 
         $modules = array();
 
-        foreach ($this->fragments as $module){
+        foreach ($this->fragments as $module) {
             $fragmentsCount = \count($module);
 
             foreach ($module as $fragment) {
-                if($fragmentsCount === $fragment['q']){
+                if ($fragmentsCount === $fragment['q']) {
                     $fragment['fragment']->release();
-                    $modules[$this->openTag . '@'.$fragment['fragment']->getParentModule() . $this->closeTag] = $fragment['fragment']->getContainer();
+                    $modules[$this->openTag . '@' . $fragment['fragment']->getParentModule() . $this->closeTag] = $fragment['fragment']->getContainer();
                     unset($this->fragments[$fragment['fragment']->getParentModule()]);
                 }
             }

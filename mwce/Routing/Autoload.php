@@ -1,16 +1,15 @@
 <?php
 /**
  * MuWebCloneEngine
- * Version: 1.6
- * User: epmak
+ * Version: 1.7
+ * epmak.a@mail.ru
  * 24.03.2017
  *
  **/
+
 if (PHP_VERSION_ID < 70100) {
     die('PHP version must be >= 7.1.0');
 }
-
-define('baseDir', __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..');
 
 spl_autoload_register(function ($class) {
 

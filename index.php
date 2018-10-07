@@ -1,13 +1,17 @@
 <?php
 /**
  * MuWebCloneEngine
- * Version: 1.6.4
- * User: epmak
+ * Version: 1.7
+ * epmak.a@mail.ru
  * 18.02.2017
- * ->
+ * ->.
  **/
+//$start = microtime(true);
+
+const baseDir = __DIR__ ;
 
 require __DIR__ . DIRECTORY_SEPARATOR . 'mwce' . DIRECTORY_SEPARATOR . 'Routing' . DIRECTORY_SEPARATOR . 'Autoload.php';
+
 /*
 $view = new \mwce\Templater\Templater('');
 $view
@@ -22,9 +26,7 @@ $view
 $view->release('mainTest.html')->show();
 */
 
-$_  = \mwce\Routing\mwce::Start();
+$web  = \mwce\Routing\mwce::Start();
+$web->show();
 
-$app = mwce\Routing\Router::start();
-$app->startPlugins();
-$app->startModules();
-$app->show();
+//echo microtime(true) - $start;
